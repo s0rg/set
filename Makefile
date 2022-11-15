@@ -1,6 +1,6 @@
 COP=cover.out
 
-.PHONY: vet lint test test-cover fuzz clean
+.PHONY: vet lint test test-cover clean
 
 vet:
 	@- go vet ./...
