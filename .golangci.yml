@@ -11,15 +11,10 @@ output:
 linters:
   enable-all: true
   disable:
-    - gochecknoglobals
-    - exhaustivestruct
     - nonamedreturns
-    - exhaustruct
     - testpackage
-    - exhaustive
     - varnamelen
     - ireturn
-    - gofumpt
 
 linters-settings:
   errcheck:
@@ -33,9 +28,3 @@ linters-settings:
       - opinionated
       - diagnostic
       - style
-
-issues:
-  exclude-rules:
-    - path: ._test\.go
-      linters:
-        - funlen
