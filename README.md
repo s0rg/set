@@ -23,31 +23,31 @@ generic unordered set for golang
 
 ```go
 import (
-	"fmt"
+    "fmt"
 
-	"github.com/s0rg/set"
+    "github.com/s0rg/set"
 )
 
 func main() {
     // create new, empty set of int's
-	s := make(set.Set[int])
+    s := make(set.Set[int])
 
     // add some values
-	s.Add(1)
-	s.Add(2)
+    s.Add(1)
+    s.Add(2)
 
     // and some more...
-	s.Load(2, 3)
+    s.Load(2, 3)
 
     // check set for value
-	if !s.Has(2) {
-		panic("2 not found")
-	}
+    if !s.Has(2) {
+        panic("2 not found")
+    }
 
     // check and add
-	if s.TryAdd(4) {
-		fmt.Println("value 4 wasnt in set, it there now")
-	}
+    if s.TryAdd(4) {
+        fmt.Println("value 4 wasnt in set, it there now")
+    }
 
     fmt.Println("Set length:", len(s))
     fmt.Println("Set contents:", s.List())
