@@ -77,7 +77,7 @@ func Intersect[T comparable](a, b Set[T]) (rv Set[T]) {
 }
 
 // Contains returns true if smallest of two sets (by length) fully contains inside bigger one,
-// if sets equals in length the result is same as comparision.
+// if sets equals in length the result is same as comparison.
 func Contains[T comparable](a, b Set[T]) (yes bool) {
 	if b.Len() > a.Len() {
 		a, b = b, a
