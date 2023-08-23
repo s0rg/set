@@ -9,7 +9,6 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/aadc34c86aed23a42013/test_coverage)](https://codeclimate.com/github/s0rg/set/test_coverage)
 ![Issues](https://img.shields.io/github/issues/s0rg/set)
 
-
 # set
 
 generic set types for golang
@@ -32,11 +31,11 @@ import (
 
 func main() {
     // create new, empty set of int's
-    s := make(set.Unordered[int]) // fastest variant as it direct map functions call
+    s := make(set.Unordered[int]) // fastest variant as it direct functions call
 
     // or
 
-    // second (slower) form for unordered constructor, it uses indirect calls via interface
+    // second (a bit slower) form for unordered constructor, it uses indirect calls via interface
     // s := set.NewUnordered[int]()
 
     // ordered constructor, only this form

@@ -13,6 +13,7 @@ linters:
   disable:
     - nonamedreturns
     - structcheck
+    - interfacer
     - varnamelen
     - depguard
     - ireturn
