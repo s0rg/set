@@ -12,10 +12,12 @@
 
 # set
 
-generic unordered set for golang
+generic set types for golang
 
 # features
 
+- both un-ordered and ordered types
+- union, diff, intersect, comparision for any two sets
 - simple API
 - 100% test coverage
 
@@ -30,14 +32,22 @@ import (
 
 func main() {
     // create new, empty set of int's
-    s := make(set.Set[int])
+    s := make(set.Unordered[int]) // fastest variant as it direct map functions call
+
+    // or
+
+    // second (slower) form for unordered constructor, it uses indirect calls via interface
+    // s := set.NewUnordered[int]()
+
+    // ordered constructor, only this form
+    // s := set.NewOrdered[int]()
 
     // add some values
     s.Add(1)
     s.Add(2)
 
     // and some more...
-    s.Load(2, 3)
+    set.Load(s, 2, 3)
 
     // check set for value
     if !s.Has(2) {
@@ -49,7 +59,15 @@ func main() {
         fmt.Println("value 4 wasnt in set, it there now")
     }
 
-    fmt.Println("Set length:", len(s))
-    fmt.Println("Set contents:", s.List())
+    // delete item
+    s.Del(1)
+
+    fmt.Println("Set length:", s.Len())
+    fmt.Println("Set contents:", s.ToSlice())
+
+    s.Clear()
+
+    fmt.Println("Set length:", s.Len())
+    fmt.Println("Set contents:", s.ToSlice())
 }
 ```
