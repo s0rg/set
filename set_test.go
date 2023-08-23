@@ -210,6 +210,10 @@ func TestContains(t *testing.T) {
 		t.Fail()
 	}
 
+	if !set.Contains(b, a) {
+		t.Fail()
+	}
+
 	if set.Contains(a, c) {
 		t.Fail()
 	}
