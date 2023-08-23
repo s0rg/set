@@ -4,7 +4,7 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/s0rg/set/v2"
+	"github.com/s0rg/set"
 )
 
 func testSet(t *testing.T, s set.Set[string]) {
