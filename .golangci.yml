@@ -1,6 +1,6 @@
 run:
   allow-parallel-runners: true
-  go: '1.19'
+  go: '1.21'
 
 output:
   format: 'colored-line-number'
@@ -12,9 +12,11 @@ linters:
   enable-all: true
   disable:
     - nonamedreturns
+    - structcheck
     - varnamelen
     - depguard
     - ireturn
+    - ifshort
 
 linters-settings:
   errcheck:
@@ -28,3 +30,11 @@ linters-settings:
       - opinionated
       - diagnostic
       - style
+
+issues:
+  exclude-rules:
+    - path: ._test\.go
+      linters:
+        - cyclop
+        - funlen
+        - dupl

@@ -1,51 +1,104 @@
 package set
 
-type (
-	stub struct{}
-
-	// Set represents hashset for comparable types.
-	Set[T comparable] map[T]stub
-)
-
-// Add add value to set, replacing previous instances.
-func (s Set[T]) Add(v T) {
-	s[v] = stub{}
+// Set is the primary interface provided by the set package.
+type Set[T comparable] interface {
+	// Add adds item to the set.
+	Add(T)
+	// Del removes item, no-op if not present.
+	Del(T)
+	// Has checks if item is already present.
+	Has(T) bool
+	// TryAdd takes attempt to add item, returns false if it already there.
+	TryAdd(T) bool
+	// Pop removes and returns an arbitrary item.
+	Pop() (v T, ok bool)
+	// Len returns current items count.
+	Len() int
+	// Clone returns shallow copy.
+	Clone() Set[T]
+	// Iter iterates items.
+	Iter(func(T) bool)
+	// ToSlice returns set as slice of items.
+	ToSlice() []T
+	// Clear removes all items.
+	Clear()
 }
 
-// TryAdd takes attempt to add value to set, returns false if value already exists.
-func (s Set[T]) TryAdd(v T) (ok bool) {
-	if s.Has(v) {
-		return false
+// Load populates given set with values.
+func Load[T comparable](s Set[T], v ...T) Set[T] {
+	for _, i := range v {
+		s.Add(i)
 	}
 
-	s.Add(v)
-
-	return true
+	return s
 }
 
-// Has checks if value is already present in set.
-func (s Set[T]) Has(v T) (ok bool) {
-	_, ok = s[v]
+// Union returns new set with elements from both sets.
+func Union[T comparable](a, b Set[T]) (rv Set[T]) {
+	rv = a.Clone()
 
-	return
-}
+	b.Iter(func(v T) bool {
+		rv.Add(v)
 
-// List returns set as slice of unique strings.
-func (s Set[T]) List() (rv []T) {
-	rv = make([]T, 0, len(s))
-
-	for k := range s {
-		rv = append(rv, k)
-	}
+		return true
+	})
 
 	return rv
 }
 
-// Load populates set with given values.
-func (s Set[T]) Load(vals ...T) Set[T] {
-	for _, v := range vals {
-		s.Add(v)
-	}
+// Diff returns new set with elements from `a` that arent in `b`.
+func Diff[T comparable](a, b Set[T]) (rv Set[T]) {
+	rv = a.Clone()
 
-	return s
+	a.Iter(func(v T) bool {
+		if b.Has(v) {
+			rv.Del(v)
+		}
+
+		return true
+	})
+
+	return rv
+}
+
+// Intersect returns new set with keys from `a` that present in `b`.
+func Intersect[T comparable](a, b Set[T]) (rv Set[T]) {
+	rv = a.Clone()
+
+	a.Iter(func(v T) bool {
+		if !b.Has(v) {
+			rv.Del(v)
+		}
+
+		return true
+	})
+
+	return rv
+}
+
+// Contains returns true if `a` has all elements from `b`.
+func Contains[T comparable](a, b Set[T]) (yes bool) {
+	b.Iter(func(v T) bool {
+		yes = a.Has(v)
+
+		return yes
+	})
+
+	return yes
+}
+
+// ContainsAny returns true if `a` has at least one element from `b`.
+func ContainsAny[T comparable](a, b Set[T]) (yes bool) {
+	a.Iter(func(v T) bool {
+		yes = b.Has(v)
+
+		return !yes
+	})
+
+	return yes
+}
+
+// Equal returns true if `a` and `b` has same length and elements.
+func Equal[T comparable](a, b Set[T]) (yes bool) {
+	return a.Len() == b.Len() && Contains(a, b)
 }
