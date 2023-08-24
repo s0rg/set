@@ -26,13 +26,14 @@ func (o *ordered[T]) Add(v T) {
 }
 
 func (o *ordered[T]) Del(v T) {
-	if !o.Has(v) {
-		return
-	}
-
+	prev := o.set.Len()
 	o.set.Del(v)
-	idx := slices.Index(o.order, v)
-	o.order = slices.Delete(o.order, idx, idx+1)
+
+	if o.set.Len() != prev {
+		idx := slices.Index(o.order, v)
+
+		o.order = slices.Clip(slices.Delete(o.order, idx, idx+1))
+	}
 }
 
 func (o *ordered[T]) Clear() {
