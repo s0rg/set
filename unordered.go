@@ -13,8 +13,11 @@ func NewUnordered[T comparable]() Set[T] {
 }
 
 // Add implements Set interface.
-func (u Unordered[T]) Add(v T) {
+func (u Unordered[T]) Add(v T) bool {
+	prev := len(u)
 	u[v] = stub{}
+
+	return prev != len(u)
 }
 
 // Del implements Set interface.
@@ -32,33 +35,11 @@ func (u Unordered[T]) Len() int {
 	return len(u)
 }
 
-// TryAdd implements Set interface.
-func (u Unordered[T]) TryAdd(v T) (ok bool) {
-	if u.Has(v) {
-		return false
-	}
-
-	u.Add(v)
-
-	return true
-}
-
 // Has implements Set interface.
 func (u Unordered[T]) Has(v T) (ok bool) {
 	_, ok = u[v]
 
 	return
-}
-
-// ToSlice implements Set interface.
-func (u Unordered[T]) ToSlice() (rv []T) {
-	rv = make([]T, 0, len(u))
-
-	for k := range u {
-		rv = append(rv, k)
-	}
-
-	return rv
 }
 
 // Iter implements Set interface.
@@ -85,17 +66,18 @@ func (u Unordered[T]) Clone() (rv Set[T]) {
 
 // Pop implements Set interface.
 func (u Unordered[T]) Pop() (v T, ok bool) {
-	if u.Len() < 1 {
+	if len(u) < 1 {
 		return v, false
 	}
 
-	u.Iter(func(t T) bool {
+	for t := range u {
 		v = t
 
-		return false
-	})
+		break
+	}
 
-	u.Del(v)
+	delete(u, v)
+	// u.Del(v)
 
 	return v, true
 }

@@ -25,7 +25,7 @@ func testSet(t *testing.T, s set.Set[string]) {
 		t.Error("unexpected length")
 	}
 
-	if len(s.ToSlice()) != 2 {
+	if len(set.ToSlice(s)) != 2 {
 		t.Error("unexpected slice length")
 	}
 
@@ -37,11 +37,11 @@ func testSet(t *testing.T, s set.Set[string]) {
 		t.Error("has val3")
 	}
 
-	if !s.TryAdd(val3) {
+	if !s.Add(val3) {
 		t.Error("TryAdd(val3) == false")
 	}
 
-	if s.TryAdd(val3) {
+	if s.Add(val3) {
 		t.Error("TryAdd(val3) == true")
 	}
 
@@ -131,13 +131,13 @@ func TestOrderedOrder(t *testing.T) {
 
 	set.Load(s, 1, 2, 3, 4, 6, 5)
 
-	if sort.IsSorted(sort.IntSlice(s.ToSlice())) {
+	if sort.IsSorted(sort.IntSlice(set.ToSlice(s))) {
 		t.Fail()
 	}
 
 	s.Del(6)
 
-	if !sort.IsSorted(sort.IntSlice(s.ToSlice())) {
+	if !sort.IsSorted(sort.IntSlice(set.ToSlice(s))) {
 		t.Fail()
 	}
 
@@ -173,7 +173,7 @@ func TestDiff(t *testing.T) {
 		t.Fail()
 	}
 
-	res := c.ToSlice()
+	res := set.ToSlice(c)
 
 	if res[0] != 1 || res[1] != 2 {
 		t.Fail()
@@ -192,7 +192,7 @@ func TestIntersect(t *testing.T) {
 		t.Fail()
 	}
 
-	res := c.ToSlice()
+	res := set.ToSlice(c)
 
 	if res[0] != 3 {
 		t.Fail()
@@ -262,148 +262,4 @@ func TestEqual(t *testing.T) {
 	if !set.Equal(a, c) {
 		t.Fail()
 	}
-}
-
-func BenchmarkSetUnorderedDirect(b *testing.B) {
-	s := make(set.Unordered[int])
-
-	b.ResetTimer()
-
-	b.Run("TryAdd", func(b *testing.B) {
-		for n := 0; n < b.N; n++ {
-			_ = s.TryAdd(n)
-		}
-	})
-
-	b.Run("Add", func(b *testing.B) {
-		for n := 0; n < b.N; n++ {
-			s.Add(n)
-		}
-	})
-
-	b.Run("Has", func(b *testing.B) {
-		for n := 0; n < b.N; n++ {
-			_ = s.Has(n)
-		}
-	})
-
-	b.Run("Len", func(b *testing.B) {
-		for n := 0; n < b.N; n++ {
-			_ = s.Len()
-		}
-	})
-
-	b.Run("ToSlice", func(b *testing.B) {
-		for n := 0; n < b.N; n++ {
-			_ = s.ToSlice()
-		}
-	})
-
-	b.Run("Clone", func(b *testing.B) {
-		for n := 0; n < b.N; n++ {
-			_ = s.Clone()
-		}
-	})
-
-	b.Run("Pop", func(b *testing.B) {
-		for n := 0; n < b.N; n++ {
-			_, _ = s.Pop()
-		}
-	})
-}
-
-func BenchmarkSetUnorderedIndirect(b *testing.B) {
-	s := set.NewUnordered[int]()
-
-	b.ResetTimer()
-
-	b.Run("TryAdd", func(b *testing.B) {
-		for n := 0; n < b.N; n++ {
-			_ = s.TryAdd(n)
-		}
-	})
-
-	b.Run("Add", func(b *testing.B) {
-		for n := 0; n < b.N; n++ {
-			s.Add(n)
-		}
-	})
-
-	b.Run("Has", func(b *testing.B) {
-		for n := 0; n < b.N; n++ {
-			_ = s.Has(n)
-		}
-	})
-
-	b.Run("Len", func(b *testing.B) {
-		for n := 0; n < b.N; n++ {
-			_ = s.Len()
-		}
-	})
-
-	b.Run("ToSlice", func(b *testing.B) {
-		for n := 0; n < b.N; n++ {
-			_ = s.ToSlice()
-		}
-	})
-
-	b.Run("Clone", func(b *testing.B) {
-		for n := 0; n < b.N; n++ {
-			_ = s.Clone()
-		}
-	})
-
-	b.Run("Pop", func(b *testing.B) {
-		for n := 0; n < b.N; n++ {
-			_, _ = s.Pop()
-		}
-	})
-}
-
-func BenchmarkSetOrdered(b *testing.B) {
-	s := set.NewOrdered[int]()
-
-	b.ResetTimer()
-
-	b.Run("TryAdd", func(b *testing.B) {
-		for n := 0; n < b.N; n++ {
-			_ = s.TryAdd(n)
-		}
-	})
-
-	b.Run("Add", func(b *testing.B) {
-		for n := 0; n < b.N; n++ {
-			s.Add(n)
-		}
-	})
-
-	b.Run("Has", func(b *testing.B) {
-		for n := 0; n < b.N; n++ {
-			_ = s.Has(n)
-		}
-	})
-
-	b.Run("Len", func(b *testing.B) {
-		for n := 0; n < b.N; n++ {
-			_ = s.Len()
-		}
-	})
-
-	b.Run("ToSlice", func(b *testing.B) {
-		for n := 0; n < b.N; n++ {
-			_ = s.ToSlice()
-		}
-	})
-
-	b.Run("Clone", func(b *testing.B) {
-		for n := 0; n < b.N; n++ {
-			_ = s.Clone()
-		}
-	})
-
-	b.Run("Pop", func(b *testing.B) {
-		for n := 0; n < b.N; n++ {
-			_, _ = s.Pop()
-		}
-	})
 }

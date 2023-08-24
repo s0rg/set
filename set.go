@@ -3,23 +3,19 @@ package set
 // Set is the primary interface provided by the set package.
 type Set[T comparable] interface {
 	// Add adds item to the set.
-	Add(T)
-	// Del removes item, no-op if not present.
-	Del(T)
+	Add(T) bool
 	// Has checks if item is already present.
 	Has(T) bool
-	// TryAdd takes attempt to add item, returns false if it already there.
-	TryAdd(T) bool
+	// Del removes item, no-op if not present.
+	Del(T)
 	// Pop removes and returns an arbitrary item.
 	Pop() (v T, ok bool)
 	// Len returns current items count.
 	Len() int
 	// Clone returns shallow copy.
 	Clone() Set[T]
-	// Iter iterates items.
+	// Iter iterates items until callback returns false.
 	Iter(func(T) bool)
-	// ToSlice returns set as slice of items.
-	ToSlice() []T
 	// Clear removes all items.
 	Clear()
 }
@@ -31,6 +27,19 @@ func Load[T comparable](s Set[T], v ...T) Set[T] {
 	}
 
 	return s
+}
+
+// ToSlice returns set as slice of items.
+func ToSlice[T comparable](s Set[T]) (rv []T) {
+	rv = make([]T, 0, s.Len())
+
+	s.Iter(func(v T) bool {
+		rv = append(rv, v)
+
+		return true
+	})
+
+	return rv
 }
 
 // Union returns new set with elements from both sets.
