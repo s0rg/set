@@ -16,6 +16,7 @@ func NewUnordered[T comparable]() Set[T] {
 func (u Unordered[T]) Add(v T) bool {
 	prev := len(u)
 	u[v] = stub{}
+
 	return prev != len(u)
 }
 
