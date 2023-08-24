@@ -15,14 +15,14 @@ func NewOrdered[T comparable]() Set[T] {
 	}
 }
 
-func (o *ordered[T]) Add(v T) {
-	prev := o.set.Len()
-
-	o.set.Add(v)
-
-	if o.set.Len() != prev {
-		o.order = append(o.order, v)
+func (o *ordered[T]) Add(v T) bool {
+	if !o.set.Add(v) {
+		return false
 	}
+
+	o.order = append(o.order, v)
+
+	return true
 }
 
 func (o *ordered[T]) Del(v T) {
@@ -45,22 +45,8 @@ func (o *ordered[T]) Len() int {
 	return o.set.Len()
 }
 
-func (o *ordered[T]) TryAdd(v T) (ok bool) {
-	if o.Has(v) {
-		return false
-	}
-
-	o.Add(v)
-
-	return true
-}
-
 func (o *ordered[T]) Has(v T) (ok bool) {
 	return o.set.Has(v)
-}
-
-func (o *ordered[T]) ToSlice() (rv []T) {
-	return o.order
 }
 
 func (o *ordered[T]) Iter(it func(T) bool) {
@@ -90,9 +76,9 @@ func (o *ordered[T]) Pop() (v T, ok bool) {
 		return v, false
 	}
 
-	v = o.order[ln-1]
+	v, o.order = o.order[ln-1], o.order[:ln-1]
 
-	o.Del(v)
+	o.set.Del(v)
 
 	return v, true
 }
