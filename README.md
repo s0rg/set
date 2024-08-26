@@ -18,6 +18,8 @@ generic set types for golang
 - both un-ordered and ordered types
 - union, diff, intersect, comparision for any two sets
 - simple API
+- zero-alloc
+- zero-dependency
 - 100% test coverage
 
 # example
@@ -64,9 +66,34 @@ func main() {
     fmt.Println("Set length:", s.Len())
     fmt.Println("Set contents:", s.ToSlice())
 
+    // iter over items
+    for i := range s.Iter {
+        fmt.Printf("iter: %d\n", i)
+    }
+
     s.Clear()
 
     fmt.Println("Set length:", s.Len())
     fmt.Println("Set contents:", s.ToSlice())
 }
+```
+
+# benchmarks
+```
+cpu: AMD Ryzen 5 5500U with Radeon Graphics
+BenchmarkSetUnorderedDirect/Add-12      7092192        174.1 ns/op      49 B/op          0 allocs/op
+BenchmarkSetUnorderedDirect/Has-12      17680040       97.33 ns/op       0 B/op          0 allocs/op
+BenchmarkSetUnorderedDirect/Len-12      1000000000    0.2496 ns/op       0 B/op          0 allocs/op
+BenchmarkSetUnorderedDirect/Pop-12      6251703         5282 ns/op       0 B/op          0 allocs/op
+BenchmarkSetUnorderedDirect/Del-12      561568860      2.145 ns/op       0 B/op          0 allocs/op
+BenchmarkSetUnorderedIndirect/Add-12    7479926        193.6 ns/op      46 B/op          0 allocs/op
+BenchmarkSetUnorderedIndirect/Has-12    17168162       80.38 ns/op       0 B/op          0 allocs/op
+BenchmarkSetUnorderedIndirect/Len-12    802026860      1.496 ns/op       0 B/op          0 allocs/op
+BenchmarkSetUnorderedIndirect/Pop-12    6782689         6487 ns/op       0 B/op          0 allocs/op
+BenchmarkSetUnorderedIndirect/Del-12    393659181      3.072 ns/op       0 B/op          0 allocs/op
+BenchmarkSetOrdered/Add-12              6576442        178.7 ns/op      67 B/op          0 allocs/op
+BenchmarkSetOrdered/Has-12              17831434       84.19 ns/op       0 B/op          0 allocs/op
+BenchmarkSetOrdered/Len-12              473897580      2.494 ns/op       0 B/op          0 allocs/op
+BenchmarkSetOrdered/Pop-12              297457706      4.054 ns/op       0 B/op          0 allocs/op
+BenchmarkSetOrdered/Del-12              144014604      8.326 ns/op       0 B/op          0 allocs/op
 ```

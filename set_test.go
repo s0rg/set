@@ -263,3 +263,30 @@ func TestEqual(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestRangeIter(t *testing.T) {
+	t.Parallel()
+
+	a := set.Load(set.NewUnordered[int](), 1, 2, 3)
+	b := set.Load(set.NewOrdered[int](), 1, 3, 4)
+
+	sum := 0
+
+	for i := range a.Iter {
+		sum += i
+	}
+
+	if sum != 6 {
+		t.Fail()
+	}
+
+	sum = 0
+
+	for i := range b.Iter {
+		sum += i
+	}
+
+	if sum != 8 {
+		t.Fail()
+	}
+}

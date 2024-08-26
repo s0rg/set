@@ -1,3 +1,3 @@
 module github.com/s0rg/set
 
-go 1.21
+go 1.23
