@@ -77,7 +77,6 @@ func (u Unordered[T]) Pop() (v T, ok bool) {
 	}
 
 	delete(u, v)
-	// u.Del(v)
 
 	return v, true
 }

@@ -3,19 +3,19 @@ package set
 // Set is the primary interface provided by the set package.
 type Set[T comparable] interface {
 	// Add adds item to the set.
-	Add(T) bool
+	Add(val T) bool
 	// Has checks if item is already present.
-	Has(T) bool
+	Has(val T) bool
 	// Del removes item, no-op if not present.
-	Del(T)
+	Del(val T)
 	// Pop removes and returns an arbitrary item.
-	Pop() (v T, ok bool)
+	Pop() (val T, ok bool)
 	// Len returns current items count.
 	Len() int
 	// Clone returns shallow copy.
 	Clone() Set[T]
 	// Iter iterates items until callback returns false.
-	Iter(func(T) bool)
+	Iter(yield func(T) bool)
 	// Clear removes all items.
 	Clear()
 }
