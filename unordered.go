@@ -1,7 +1,7 @@
 package set
 
 type (
-	stub struct{}
+	stub = bool
 
 	// Unordered is a simple and effective un-ordered generic set.
 	Unordered[T comparable] map[T]stub
@@ -15,7 +15,7 @@ func NewUnordered[T comparable]() Set[T] {
 // Add implements Set interface.
 func (u Unordered[T]) Add(v T) bool {
 	prev := len(u)
-	u[v] = stub{}
+	u[v] = true
 
 	return prev != len(u)
 }
