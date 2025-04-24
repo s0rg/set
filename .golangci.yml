@@ -12,6 +12,7 @@ linters:
     - nonamedreturns
     - varnamelen
     - depguard
+    - intrange
     - ireturn
 
 linters-settings:
