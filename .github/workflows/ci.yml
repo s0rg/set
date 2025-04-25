@@ -9,6 +9,11 @@ on:
     branches:
       - master
 
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -20,7 +25,7 @@ jobs:
       - name: setup golang
         uses: actions/setup-go@v5
         with:
-          go-version: ^1.23
+          go-version: ^1.24
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v5
   test:
@@ -33,19 +38,15 @@ jobs:
       - name: setup golang
         uses: actions/setup-go@v5
         with:
-          go-version: ^1.23
-      - name: tests-only
-        if: ${{ github.event_name == 'pull_request' }}
+          go-version: ^1.24
+      - name: run-test
         run: make test
-      - name: test-coverage
+      - name: push-coverage
         if: ${{ github.event_name == 'push' }}
-        uses: paambaati/codeclimate-action@v6.0.0
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        uses: qltysh/qlty-action/coverage@v1
         with:
-          coverageCommand: make test
-          coverageLocations: ${{ github.workspace }}/cover.out:gocov
-          prefix: github.com/${{ github.repository }}
+          token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
+          files: ${{ github.workspace }}/cover.out
   codeql:
     if: github.event_name == 'push'
     needs: [lint, test]
@@ -58,13 +59,13 @@ jobs:
       - name: setup golang
         uses: actions/setup-go@v5
         with:
-          go-version: ^1.23
+          go-version: ^1.24
       - name: init codeql
-        uses: github/codeql-action/init@v2
+        uses: github/codeql-action/init@v3
         with:
           languages: 'go'
       - name: run analysis
-        uses: github/codeql-action/analyze@v2
+        uses: github/codeql-action/analyze@v3
   reportcard:
     runs-on: ubuntu-latest
     needs: codeql

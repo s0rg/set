@@ -5,8 +5,8 @@
 
 [![CI](https://github.com/s0rg/set/workflows/ci/badge.svg)](https://github.com/s0rg/set/actions?query=workflow%3Aci)
 [![Go Report Card](https://goreportcard.com/badge/github.com/s0rg/set)](https://goreportcard.com/report/github.com/s0rg/set)
-[![Maintainability](https://api.codeclimate.com/v1/badges/aadc34c86aed23a42013/maintainability)](https://codeclimate.com/github/s0rg/set/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/aadc34c86aed23a42013/test_coverage)](https://codeclimate.com/github/s0rg/set/test_coverage)
+[![Maintainability](https://qlty.sh/badges/06d50a96-bbc8-4635-9f48-83ea9fdf548b/maintainability.svg)](https://qlty.sh/gh/s0rg/projects/set)
+[![Code Coverage](https://qlty.sh/badges/06d50a96-bbc8-4635-9f48-83ea9fdf548b/test_coverage.svg)](https://qlty.sh/gh/s0rg/projects/set)
 ![Issues](https://img.shields.io/github/issues/s0rg/set)
 
 # set
