@@ -1,6 +1,6 @@
 # ci workflow
 name: ci
-Ж:Ж
+
 on:
   push:
     branches:
